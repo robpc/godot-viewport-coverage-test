@@ -8,30 +8,28 @@ onready var data_size = $DataSize
 
 signal update_coverage()
 
-var last_taken: float = 0
-func _physics_process(delta):
-	
-	if not checkbutton.pressed:
-		return
-	
-	if last_taken > 0.25:
-		last_taken = 0
-		
-		_update_coverage()
-	else:
-		last_taken += delta
+var thread
+var _should_stop_thread: bool = false
 
-var data: Image
-func _get_data():
-	yield(get_tree(), 'idle_frame')
-	data = viewport.get_texture().get_data()
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	thread = Thread.new()
+	thread.start(self, "_run_thread")
+
+func _run_thread(_userdata):
+	while not _should_stop_thread:
+		if checkbutton.pressed:
+			_update_coverage()
+		
+		OS.delay_msec(500)
+
+func _exit_tree():
+	_should_stop_thread = true
+	thread.wait_to_finish()
 
 func _update_coverage() -> void:
 	var stopwatch = StopWatch.new()
-	
-	#yield(_get_data(), 'completed')
-	
-	#yield(get_tree(), 'idle_frame')
+
 	var data = viewport.get_texture().get_data()
 	
 	var width = data.get_width()

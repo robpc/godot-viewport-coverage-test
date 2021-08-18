@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://CpuCalculation.gd" type="Script" id=1]
 [ext_resource path="res://ShaderCalculation.gd" type="Script" id=2]
+[ext_resource path="res://ShaderThreadCalculation.gd" type="Script" id=3]
 
-[sub_resource type="Shader" id=2]
+[sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
 render_mode unshaded;
 
@@ -34,10 +35,10 @@ void fragment() {
 	}
 }"
 
-[sub_resource type="ShaderMaterial" id=3]
-shader = SubResource( 2 )
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
 
-[sub_resource type="ViewportTexture" id=1]
+[sub_resource type="ViewportTexture" id=3]
 viewport_path = NodePath("CenterContainer/Layout/Map/Viewport")
 
 [sub_resource type="ViewportTexture" id=4]
@@ -53,9 +54,9 @@ __meta__ = {
 }
 
 [node name="Layout" type="HBoxContainer" parent="CenterContainer"]
-margin_left = 353.0
+margin_left = 284.0
 margin_top = 234.0
-margin_right = 671.0
+margin_right = 740.0
 margin_bottom = 366.0
 custom_constants/separation = 32
 __meta__ = {
@@ -173,17 +174,88 @@ __meta__ = {
 [node name="Viewport" type="Viewport" parent="CenterContainer/Layout/ShaderCalculation/ViewportContainer"]
 size = Vector2( 2, 2 )
 handle_input_locally = false
+hdr = false
+disable_3d = true
+usage = 0
 render_target_update_mode = 3
 
 [node name="TextureRect" type="TextureRect" parent="CenterContainer/Layout/ShaderCalculation/ViewportContainer/Viewport"]
-material = SubResource( 3 )
+material = SubResource( 2 )
 margin_right = 100.0
 margin_bottom = 100.0
-texture = SubResource( 1 )
+texture = SubResource( 3 )
 
 [node name="TextureRect" type="TextureRect" parent="CenterContainer/Layout/ShaderCalculation"]
 margin_top = 122.0
 margin_right = 78.0
+margin_bottom = 132.0
+rect_min_size = Vector2( 10, 10 )
+texture = SubResource( 4 )
+expand = true
+stretch_mode = 6
+
+[node name="ShaderThreadCalculation" type="VBoxContainer" parent="CenterContainer/Layout"]
+margin_left = 350.0
+margin_right = 456.0
+margin_bottom = 132.0
+script = ExtResource( 3 )
+
+[node name="Title" type="Label" parent="CenterContainer/Layout/ShaderThreadCalculation"]
+margin_right = 106.0
+margin_bottom = 14.0
+text = "Shader in Thread"
+align = 1
+
+[node name="CheckButton" type="CheckButton" parent="CenterContainer/Layout/ShaderThreadCalculation"]
+margin_top = 18.0
+margin_right = 106.0
+margin_bottom = 58.0
+
+[node name="Coverage" type="Label" parent="CenterContainer/Layout/ShaderThreadCalculation"]
+margin_top = 62.0
+margin_right = 106.0
+margin_bottom = 76.0
+text = "78%"
+
+[node name="Time" type="Label" parent="CenterContainer/Layout/ShaderThreadCalculation"]
+margin_top = 80.0
+margin_right = 106.0
+margin_bottom = 94.0
+text = "23.304ms"
+
+[node name="DataSize" type="Label" parent="CenterContainer/Layout/ShaderThreadCalculation"]
+margin_top = 98.0
+margin_right = 106.0
+margin_bottom = 112.0
+text = "5x5"
+
+[node name="ViewportContainer" type="ViewportContainer" parent="CenterContainer/Layout/ShaderThreadCalculation"]
+margin_left = 52.0
+margin_top = 116.0
+margin_right = 54.0
+margin_bottom = 118.0
+size_flags_horizontal = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Viewport" type="Viewport" parent="CenterContainer/Layout/ShaderThreadCalculation/ViewportContainer"]
+size = Vector2( 2, 2 )
+handle_input_locally = false
+hdr = false
+disable_3d = true
+usage = 0
+render_target_update_mode = 3
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer/Layout/ShaderThreadCalculation/ViewportContainer/Viewport"]
+material = SubResource( 2 )
+margin_right = 100.0
+margin_bottom = 100.0
+texture = SubResource( 3 )
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer/Layout/ShaderThreadCalculation"]
+margin_top = 122.0
+margin_right = 106.0
 margin_bottom = 132.0
 rect_min_size = Vector2( 10, 10 )
 texture = SubResource( 4 )
