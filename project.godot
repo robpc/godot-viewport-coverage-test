@@ -1,0 +1,38 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Reference",
+"class": "StopWatch",
+"language": "GDScript",
+"path": "res://StopWatch.gd"
+} ]
+_global_script_class_icons={
+"StopWatch": ""
+}
+
+[application]
+
+config/name="viewport-coverage-test"
+run/main_scene="res://Main.tscn"
+config/icon="res://icon.png"
+
+[display]
+
+window/dpi/allow_hidpi=true
+
+[physics]
+
+common/enable_pause_aware_picking=true
+
+[rendering]
+
+environment/default_clear_color=Color( 0.462745, 0.498039, 0.776471, 1 )
+environment/default_environment="res://default_env.tres"

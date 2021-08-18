@@ -1,0 +1,191 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://CpuCalculation.gd" type="Script" id=1]
+[ext_resource path="res://ShaderCalculation.gd" type="Script" id=2]
+
+[sub_resource type="Shader" id=2]
+code = "shader_type canvas_item;
+render_mode unshaded;
+
+void fragment() {
+	vec2 pixel_min = vec2(0.0, TEXTURE_PIXEL_SIZE.y);
+	vec2 pixel_max = vec2(TEXTURE_PIXEL_SIZE.x, TEXTURE_PIXEL_SIZE.y * 2.0);
+	
+	if (UV.x > pixel_min.x && UV.x < pixel_max.x && UV.y > pixel_min.y && UV.y < pixel_max.y) {
+		//COLOR = vec4(vec3(1.0), 1.0);
+		
+		float total = 0.0;
+		float complete = 0.0;
+		
+		for (float x = 0.0; x <= 1.0; x += TEXTURE_PIXEL_SIZE.x) {
+			for (float y = 0.0; y <= 1.0; y += TEXTURE_PIXEL_SIZE.y) {
+				vec4 color = textureLod(TEXTURE, vec2(x,y), 0.0);
+				if (color.r > 0.1) {
+					total += 1.0;
+					if (color.r < 0.9)
+						complete += 1.0;
+				}
+			}
+		}
+		float coverage = complete / total;
+		COLOR = vec4(vec3(coverage, 0.0, 0.0), 1.0);
+	}	else {
+		COLOR = texture(TEXTURE, UV);
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = SubResource( 2 )
+
+[sub_resource type="ViewportTexture" id=1]
+viewport_path = NodePath("CenterContainer/Layout/Map/Viewport")
+
+[sub_resource type="ViewportTexture" id=4]
+viewport_path = NodePath("CenterContainer/Layout/ShaderCalculation/ViewportContainer/Viewport")
+
+[node name="Main" type="CanvasLayer"]
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Layout" type="HBoxContainer" parent="CenterContainer"]
+margin_left = 353.0
+margin_top = 234.0
+margin_right = 671.0
+margin_bottom = 366.0
+custom_constants/separation = 32
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Map" type="ViewportContainer" parent="CenterContainer/Layout"]
+margin_right = 100.0
+margin_bottom = 132.0
+rect_min_size = Vector2( 100, 100 )
+
+[node name="Viewport" type="Viewport" parent="CenterContainer/Layout/Map"]
+size = Vector2( 100, 100 )
+handle_input_locally = false
+render_target_update_mode = 3
+
+[node name="Grass" type="ColorRect" parent="CenterContainer/Layout/Map/Viewport"]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 100, 100 )
+
+[node name="House" type="ColorRect" parent="CenterContainer/Layout/Map/Viewport"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 50.0
+margin_bottom = 40.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="Mower" type="Line2D" parent="CenterContainer/Layout/Map/Viewport"]
+points = PoolVector2Array( 0, 100, 10, 90, 20, 85, 30, 80 )
+default_color = Color( 0.298039, 0.298039, 0.298039, 1 )
+
+[node name="CpuCalculation" type="VBoxContainer" parent="CenterContainer/Layout"]
+margin_left = 132.0
+margin_right = 208.0
+margin_bottom = 132.0
+script = ExtResource( 1 )
+
+[node name="Title" type="Label" parent="CenterContainer/Layout/CpuCalculation"]
+margin_right = 76.0
+margin_bottom = 14.0
+text = "CPU Loop"
+
+[node name="CheckButton" type="CheckButton" parent="CenterContainer/Layout/CpuCalculation"]
+margin_top = 18.0
+margin_right = 76.0
+margin_bottom = 58.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Coverage" type="Label" parent="CenterContainer/Layout/CpuCalculation"]
+margin_top = 62.0
+margin_right = 76.0
+margin_bottom = 76.0
+text = "78%"
+
+[node name="Time" type="Label" parent="CenterContainer/Layout/CpuCalculation"]
+margin_top = 80.0
+margin_right = 76.0
+margin_bottom = 94.0
+text = "23.304ms"
+
+[node name="DataSize" type="Label" parent="CenterContainer/Layout/CpuCalculation"]
+margin_top = 98.0
+margin_right = 76.0
+margin_bottom = 112.0
+text = "5x5"
+
+[node name="ShaderCalculation" type="VBoxContainer" parent="CenterContainer/Layout"]
+margin_left = 240.0
+margin_right = 318.0
+margin_bottom = 132.0
+script = ExtResource( 2 )
+
+[node name="Title" type="Label" parent="CenterContainer/Layout/ShaderCalculation"]
+margin_right = 78.0
+margin_bottom = 14.0
+text = "Shader Loop"
+align = 1
+
+[node name="CheckButton" type="CheckButton" parent="CenterContainer/Layout/ShaderCalculation"]
+margin_top = 18.0
+margin_right = 78.0
+margin_bottom = 58.0
+
+[node name="Coverage" type="Label" parent="CenterContainer/Layout/ShaderCalculation"]
+margin_top = 62.0
+margin_right = 78.0
+margin_bottom = 76.0
+text = "78%"
+
+[node name="Time" type="Label" parent="CenterContainer/Layout/ShaderCalculation"]
+margin_top = 80.0
+margin_right = 78.0
+margin_bottom = 94.0
+text = "23.304ms"
+
+[node name="DataSize" type="Label" parent="CenterContainer/Layout/ShaderCalculation"]
+margin_top = 98.0
+margin_right = 78.0
+margin_bottom = 112.0
+text = "5x5"
+
+[node name="ViewportContainer" type="ViewportContainer" parent="CenterContainer/Layout/ShaderCalculation"]
+margin_left = 38.0
+margin_top = 116.0
+margin_right = 40.0
+margin_bottom = 118.0
+size_flags_horizontal = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Viewport" type="Viewport" parent="CenterContainer/Layout/ShaderCalculation/ViewportContainer"]
+size = Vector2( 2, 2 )
+handle_input_locally = false
+render_target_update_mode = 3
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer/Layout/ShaderCalculation/ViewportContainer/Viewport"]
+material = SubResource( 3 )
+margin_right = 100.0
+margin_bottom = 100.0
+texture = SubResource( 1 )
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer/Layout/ShaderCalculation"]
+margin_top = 122.0
+margin_right = 78.0
+margin_bottom = 132.0
+rect_min_size = Vector2( 10, 10 )
+texture = SubResource( 4 )
+expand = true
+stretch_mode = 6
