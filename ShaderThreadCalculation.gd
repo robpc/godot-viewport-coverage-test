@@ -1,10 +1,10 @@
 extends VBoxContainer
 
-onready var viewport =  $ViewportContainer/Viewport
-onready var checkbutton = $CheckButton
-onready var coverage = $Coverage
-onready var time = $Time
-onready var data_size = $DataSize
+@onready var viewport =  $ViewportContainer/Viewport
+@onready var checkbutton = $CheckButton
+@onready var coverage = $Coverage
+@onready var time = $Time
+@onready var data_size = $DataSize
 
 signal update_coverage()
 
@@ -30,14 +30,12 @@ func _exit_tree():
 func _update_coverage() -> void:
 	var stopwatch = StopWatch.new()
 
-	var data = viewport.get_texture().get_data()
+	var data = viewport.get_texture().get_image()
 	
 	var width = data.get_width()
 	var height = data.get_height()
 	
-	data.lock()
-	var pixel = data.get_pixel(0, 0)
-	data.unlock()
+	var pixel = data.get_pixel(0, 1)
 	
 	var _coverage_raw = pixel.r * 100.0
 	var _coverage = round(_coverage_raw * 100) / 100.0
