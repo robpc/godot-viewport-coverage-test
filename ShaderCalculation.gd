@@ -16,22 +16,20 @@ func _physics_process(delta):
 	
 	if last_taken > 0.25:
 		last_taken = 0
+		viewport.render_target_update_mode = Viewport.UPDATE_ONCE
 		
-		_update_coverage()
+		call_deferred("_update_coverage")
 	else:
 		last_taken += delta
 
 var data: Image
 func _get_data():
-	yield(get_tree(), 'idle_frame')
 	data = viewport.get_texture().get_data()
+	viewport.render_target_update_mode = Viewport.UPDATE_ONCE
 
 func _update_coverage() -> void:
 	var stopwatch = StopWatch.new()
-	
-	#yield(_get_data(), 'completed')
-	
-	#yield(get_tree(), 'idle_frame')
+
 	var data = viewport.get_texture().get_data()
 	
 	var width = data.get_width()

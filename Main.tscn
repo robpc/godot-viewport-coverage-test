@@ -71,7 +71,8 @@ rect_min_size = Vector2( 100, 100 )
 [node name="Viewport" type="Viewport" parent="CenterContainer/Layout/Map"]
 size = Vector2( 100, 100 )
 handle_input_locally = false
-render_target_update_mode = 3
+render_target_clear_mode = 1
+render_target_update_mode = 0
 
 [node name="Grass" type="ColorRect" parent="CenterContainer/Layout/Map/Viewport"]
 margin_right = 40.0
